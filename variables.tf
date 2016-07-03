@@ -27,3 +27,18 @@ variable "aws_amis" {
     us-west-2 = "ami-21f78e11"
   }
 }
+
+variable "vpc-cidr" {
+    description = "CIDR for the whole VPC"
+    default = "10.0.0.0/16"
+}
+
+variable "eu-west-1a-public-cidr" {
+    description = "CIDR for the Public Subnet in eu-west-1a"
+    default = "10.0.1.0/24"
+}
+
+variable "eu-west-1b-public-cidr" {
+    description = "CIDR for the Public Subnet in eu-west-1b"
+    default = "10.0.2.0/24"
+}

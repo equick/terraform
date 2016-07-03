@@ -4,13 +4,9 @@
 
 
 output "web0" {
-  value = "${aws_instance.webserver.0.public_ip}"
+  value = "${aws_instance.web0.public_ip}"
 }
 
 output "web1" {
-  value = "${aws_instance.webserver.1.public_ip}"
-}
-
-output "db0" {
-  value = "${aws_instance.db.0.public_ip}"
+  value = "${aws_instance.web1.public_ip}"
 }
