@@ -11,8 +11,13 @@ resource "aws_instance" "web0" {
        user = "ec2-user"
   }
   provisioner "chef"  {
+        attributes_json = <<EOF
+        {
+	  "file_system_id": "${aws_efs_file_system.wiki_efs.id}"
+        }
+        EOF
         environment = "_default"
-        run_list = ["role[base]"]
+        run_list = ["role[base]","recipe[linuxproblems::db]","recipe[linuxproblems::web]"]
         node_name = "web0"
         server_url = "https://api.opscode.com/organizations/quick"
         validation_client_name = "quick-validator"
@@ -21,6 +26,7 @@ resource "aws_instance" "web0" {
   subnet_id = "${aws_subnet.eu-west-1a-public.id}"
   security_groups = ["${aws_security_group.ssh.id}","${aws_security_group.http.id}","${aws_security_group.allow_any_egress.id}"]
   associate_public_ip_address = true
+  depends_on = ["aws_efs_mount_target.wiki_efs-eu-west-1a"]
 }
 
 
@@ -36,6 +42,11 @@ resource "aws_instance" "web1" {
        user = "ec2-user"
   }
   provisioner "chef"  {
+        attributes_json = <<EOF
+        {
+	  "file_system_id": "${aws_efs_file_system.wiki_efs.id}"
+        }
+        EOF
         environment = "_default"
         run_list = ["role[base]","recipe[linuxproblems::db]","recipe[linuxproblems::web]"]
         node_name = "web1"
@@ -46,5 +57,6 @@ resource "aws_instance" "web1" {
   subnet_id = "${aws_subnet.eu-west-1b-public.id}"
   security_groups = ["${aws_security_group.ssh.id}","${aws_security_group.http.id}","${aws_security_group.allow_any_egress.id}"]
   associate_public_ip_address = true
+  depends_on = ["aws_efs_mount_target.wiki_efs-eu-west-1b"]
 }
 
